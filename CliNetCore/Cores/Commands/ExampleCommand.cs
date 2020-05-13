@@ -47,14 +47,18 @@ namespace CliNetCore.Cores.Commands
         /// <returns>-1:종료, 그 외는 처리 결과.</returns>
         public int Action()
         {
-            IPEndPoint point = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5050);
+            IPEndPoint point = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3333);
 
             //var sessionid = Handler.DefaultSessionId();
             //Task<string> task = JsonRpcProcessor.Process(sessionid, "{'method':'add','params':[1,2],'id':1}", this);
             //task.Wait(1000);
 
-            //JsonRpcClient client = new JsonRpcClient(point, Encoding.UTF8);
-            //client.InvokeSingleArgument
+            JsonRpcClient client = new JsonRpcClient(point, Encoding.UTF8);
+            var result = client.InvokeSingleArgument<int>("Incr", 2);
+            result.Subscribe((JsonResponse<int> response) =>
+            {
+                Console.WriteLine(response.Result);
+            });
 
             Console.WriteLine("Executed example command. Required:{0}, Option:{1}", Ip, Port);
             return 1;
