@@ -27,7 +27,6 @@ namespace CliNetCore
                 if (currentArgs.Count() <= 0)
                 {
                     // 새로운 파라미터 입력.
-                    Console.Write("<");
                     currentArgs = Console.ReadLine().Split(DELIMITER_CHARS);
                 }
 
@@ -47,7 +46,7 @@ namespace CliNetCore
                 if (isContinuous == true)
                 {
                     // 지속적으로 사용하는 경우 결과값 출력.
-                    Console.WriteLine(">{0}", commandResult);
+                    Console.WriteLine(commandResult == 0 ? "Error" : "Ok");
                 }
             } while (isContinuous == true);
         }

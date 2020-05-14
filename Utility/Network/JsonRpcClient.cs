@@ -140,7 +140,7 @@ namespace Utility.Network
                 {
                     socket.Connect(this.ServiceEndPoint);
 
-                    Console.Write("Socket connected to " + socket.RemoteEndPoint.ToString());
+                    Console.WriteLine("Socket connected to " + socket.RemoteEndPoint.ToString());
 
                     // Encode the data string into a byte array.
                     byte[] msg = Encoding.GetBytes(messageToSend);
@@ -215,6 +215,7 @@ namespace Utility.Network
             {
                 obs.OnError(ex);
             }
+
             if (rjson == null)
             {
                 string exceptionMessage = "";
@@ -233,6 +234,7 @@ namespace Utility.Network
             {
                 obs.OnNext(rjson);
             }
+
             obs.OnCompleted();
         }
 
