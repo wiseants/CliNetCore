@@ -32,11 +32,12 @@ namespace Utility.Network
         {
             var rpcResultHandler = new AsyncCallback(state =>
             {
-                using(var writer = ((StreamWriter)state.AsyncState))
-                {
-                    writer.WriteLine(((JsonRpcStateAsync)state).Result);
-                    writer.FlushAsync();
-                }
+                var async = ((JsonRpcStateAsync)state);
+                var result = async.Result;
+                var writer = ((StreamWriter)async.AsyncState);
+
+                writer.WriteLine(result);
+                writer.FlushAsync();
             });
 
             SocketListener.Start(Port, (writer, line) =>
