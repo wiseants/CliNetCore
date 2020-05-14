@@ -1,9 +1,8 @@
 ﻿using AustinHarris.JsonRpc;
 using System;
 using System.Linq;
-using Utility.Network;
 
-namespace CliNetCore.Cores
+namespace Utility.Network
 {
     /// <summary>
     /// RPC 서비스 싱글톤 클래스.

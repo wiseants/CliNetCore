@@ -1,9 +1,6 @@
 ﻿using CliNetCore.Interfaces;
 using CommandLine;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using TcpServiceNetCore.Services;
 using Utility.Network;
 
 namespace CliNetCore.Cores.Commands
