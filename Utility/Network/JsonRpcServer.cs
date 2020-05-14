@@ -42,7 +42,7 @@ namespace Utility.Network
             });
 
             socketListener = new SocketListener();
-            socketListener.Start(Port, (writer, line) =>
+            socketListener.StartAsync(Port, (writer, line) =>
             {
                 var async = new JsonRpcStateAsync(rpcResultHandler, writer) 
                 { 
