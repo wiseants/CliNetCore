@@ -27,7 +27,7 @@ namespace CliNetCore.Cores.Commands
             if (PowerOnOff == 1)
             {
                 Console.WriteLine("Start service.");
-                ServiceManager.Instance.Start();
+                RpcServiceManager.Instance.Start();
             }
             else
             {
