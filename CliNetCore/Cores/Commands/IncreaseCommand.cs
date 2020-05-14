@@ -10,7 +10,7 @@ using Utility.Network;
 namespace CliNetCore.Cores.Commands
 {
     [Verb("increase", HelpText = "Increase number")]
-    public class AddCommand : IAction
+    public class IncreaseCommand : IAction
     {
         public bool IsValid => true;
 
