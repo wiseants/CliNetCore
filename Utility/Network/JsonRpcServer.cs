@@ -15,6 +15,7 @@ namespace Utility.Network
         #region Fields
 
         private readonly List<object> serviceArray = new List<object>();
+        private SocketListener socketListener = null;
 
         #endregion
 
@@ -40,7 +41,8 @@ namespace Utility.Network
                 writer.FlushAsync();
             });
 
-            SocketListener.Start(Port, (writer, line) =>
+            socketListener = new SocketListener();
+            socketListener.Start(Port, (writer, line) =>
             {
                 var async = new JsonRpcStateAsync(rpcResultHandler, writer) 
                 { 
