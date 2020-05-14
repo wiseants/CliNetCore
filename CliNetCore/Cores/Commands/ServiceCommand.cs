@@ -27,7 +27,7 @@ namespace CliNetCore.Cores.Commands
             if (PowerOnOff == 1)
             {
                 Console.WriteLine("Start service.");
-                JsonRpcService.Instance.Start();
+                ServiceManager.Instance.Start();
             }
             else
             {

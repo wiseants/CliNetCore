@@ -15,7 +15,7 @@ namespace CliNetCore
             // IAction 구현 클래스를 전부 사용.
             IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(IAction).IsAssignableFrom(p));
+                .Where(p => typeof(IAction).IsAssignableFrom(p) && p.IsAbstract == false);
 
             // 파라미터가 있는 경우 1회 실행 후 종료하는 모드.
             // 파라미터가 없는 경우 지속적인 명령어 입력이 가능한 모드. 종료 명령으로 종료.
