@@ -1,8 +1,9 @@
-﻿using AustinHarris.JsonRpc;
+﻿// https://github.com/Astn/JSON-RPC.NET/wiki/Getting-Started-(Sockets) 인용
+
+using AustinHarris.JsonRpc;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace Utility.Network
 {
@@ -29,16 +30,14 @@ namespace Utility.Network
 
         public void Start()
         {
-            var rpcResultHandler = new AsyncCallback(
-                state =>
-                {
-                    var async = ((JsonRpcStateAsync)state);
-                    var result = async.Result;
-                    var writer = ((StreamWriter)async.AsyncState);
+            var rpcResultHandler = new AsyncCallback(state =>
+            {
+                var async = ((JsonRpcStateAsync)state);
+                var writer = ((StreamWriter)async.AsyncState);
 
-                    writer.WriteLine(result);
-                    writer.FlushAsync();
-                });
+                writer.WriteLine(async.Result);
+                writer.FlushAsync();
+            });
 
             SocketListener.Start(Port, (writer, line) =>
             {

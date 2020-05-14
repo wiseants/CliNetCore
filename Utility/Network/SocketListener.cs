@@ -1,12 +1,10 @@
-﻿// https://github.com/Astn/JSON-RPC.NET/wiki/Getting-Started-(Sockets)
+﻿// https://github.com/Astn/JSON-RPC.NET/wiki/Getting-Started-(Sockets)  인용
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Utility.Network
 {
