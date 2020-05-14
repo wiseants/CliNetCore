@@ -29,20 +29,22 @@ namespace Utility.Network
 
         public void Start()
         {
-            var rpcResultHandler = new AsyncCallback(
-                state =>
+            var rpcResultHandler = new AsyncCallback(state =>
+            {
+                using(var writer = ((StreamWriter)state.AsyncState))
                 {
-                    var async = ((JsonRpcStateAsync)state);
-                    var result = async.Result;
-                    var writer = ((StreamWriter)async.AsyncState);
-
-                    writer.WriteLine(result);
+                    writer.WriteLine(((JsonRpcStateAsync)state).Result);
                     writer.FlushAsync();
-                });
+                }
+            });
 
             SocketListener.Start(Port, (writer, line) =>
             {
-                var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
+                var async = new JsonRpcStateAsync(rpcResultHandler, writer) 
+                { 
+                    JsonRpc = line 
+                };
+
                 JsonRpcProcessor.Process(async, writer);
             });
         }
