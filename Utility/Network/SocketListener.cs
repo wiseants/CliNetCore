@@ -2,9 +2,11 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Utility.Network
 {
@@ -19,19 +21,16 @@ namespace Utility.Network
             {
                 try
                 {
+                    //Task<TcpClient> clientTask = server.AcceptTcpClientAsync();
+                    //clientTask.Wait()
                     using (var client = server.AcceptTcpClient())
                     using (var stream = client.GetStream())
                     {
-                        Console.WriteLine("Client Connected..");
                         var reader = new StreamReader(stream, Encoding.UTF8);
-                        var writer = new StreamWriter(stream, new UTF8Encoding(false));
-
-                        while (!reader.EndOfStream)
+                        while (reader.EndOfStream == false)
                         {
-                            var line = reader.ReadLine();
-                            handleRequest(writer, line);
-
-                            Console.WriteLine("REQUEST: {0}", line);
+                            var receivedMessage = reader.ReadLine();
+                            handleRequest(new StreamWriter(stream, new UTF8Encoding(false)), receivedMessage);
                         }
                     }
                 }

@@ -23,7 +23,7 @@ namespace CliNetCore.Cores.Commands
 
         public int Action()
         {
-            IPEndPoint point = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3333);
+            IPEndPoint point = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8055);
 
             JsonRpcClient client = new JsonRpcClient(point, Encoding.UTF8);
             var result = client.Invoke<int>("Incr", new object[] { TargetNumber });
