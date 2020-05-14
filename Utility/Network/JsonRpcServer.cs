@@ -4,6 +4,7 @@ using AustinHarris.JsonRpc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace Utility.Network
 {
@@ -16,6 +17,7 @@ namespace Utility.Network
 
         private readonly List<object> serviceArray = new List<object>();
         private SocketListener socketListener = null;
+        private CancellationTokenSource tokenSource = null;
 
         #endregion
 
@@ -42,15 +44,22 @@ namespace Utility.Network
             });
 
             socketListener = new SocketListener();
+            tokenSource = new CancellationTokenSource();
+
             socketListener.StartAsync(Port, (writer, line) =>
             {
-                var async = new JsonRpcStateAsync(rpcResultHandler, writer) 
-                { 
-                    JsonRpc = line 
+                var async = new JsonRpcStateAsync(rpcResultHandler, writer)
+                {
+                    JsonRpc = line
                 };
 
                 JsonRpcProcessor.Process(async, writer);
-            });
+            }, tokenSource.Token);
+        }
+
+        public void Stop()
+        {
+            tokenSource.Cancel();
         }
 
         #endregion

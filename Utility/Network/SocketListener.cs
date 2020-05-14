@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Utility.Network
@@ -12,17 +13,28 @@ namespace Utility.Network
     public class SocketListener
     {
         private TcpListener listener = null;
-        public async Task StartAsync(int listenPort, Action<StreamWriter, string> handleRequest)
+
+        public void StartAsync(int listenPort, Action<StreamWriter, string> handleRequest)
+        {
+            StartAsync(listenPort, handleRequest, CancellationToken.None);
+        }
+
+        public async void StartAsync(int listenPort, Action<StreamWriter, string> handleRequest, CancellationToken token)
         {
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), listenPort);
             listener.Start();
+
+            token.Register(state =>
+            {
+                ((TcpListener)state).Stop();
+            }, listener);
 
             while (true)
             {
                 try
                 {
                     TcpClient tc = await listener.AcceptTcpClientAsync().ConfigureAwait(false);
-                    await Task.Factory.StartNew(o => AsyncTcpProcess(o, handleRequest), tc);
+                    _ = Task.Factory.StartNew(o => AsyncTcpProcess(o, handleRequest), tc, token);
                 }
                 catch (Exception e)
                 {
@@ -31,7 +43,7 @@ namespace Utility.Network
             }
         }
 
-        void AsyncTcpProcess(object o, Action<StreamWriter, string> handleRequest)
+        private void AsyncTcpProcess(object o, Action<StreamWriter, string> handleRequest)
         {
             if (o is TcpClient == false)
             {

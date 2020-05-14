@@ -29,6 +29,7 @@ namespace CliNetCore.Cores.Commands
             else
             {
                 Console.WriteLine("Stop service.");
+                RpcServiceManager.Instance.Stop();
             }
 
             return 1;
