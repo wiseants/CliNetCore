@@ -1,6 +1,7 @@
 ﻿// https://github.com/Astn/JSON-RPC.NET/wiki/Getting-Started-(Sockets)  인용.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -29,16 +30,15 @@ namespace Utility.Network
                 ((TcpListener)state).Stop();
             }, listener);
 
-            while (true)
+            while (token.IsCancellationRequested == false)
             {
                 try
                 {
                     TcpClient tc = await listener.AcceptTcpClientAsync().ConfigureAwait(false);
                     _ = Task.Factory.StartNew(o => AsyncTcpProcess(o, handleRequest), tc, token);
                 }
-                catch (Exception e)
+                catch (Exception) when (token.IsCancellationRequested == true)
                 {
-                    Console.WriteLine("RPCServer exception " + e);
                 }
             }
         }
