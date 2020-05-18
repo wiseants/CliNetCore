@@ -12,8 +12,16 @@ namespace CliNetCore.Cores.Commands
 
         public bool IsValid => true;
 
-        [Option('p', "power", Required = true, HelpText = "Power on/off service.")]
-        public int PowerOnOff { get; set; }
+        [Option('p', "power", Required = true, HelpText = "turn on/turn off service.")]
+        public string Power { get; set; }
+
+        private bool IsPowerOn
+        {
+            get
+            {
+                return Power.Equals("on", StringComparison.OrdinalIgnoreCase) || Power.Equals("off", StringComparison.OrdinalIgnoreCase);
+            }
+        }
 
         #endregion
 
@@ -21,14 +29,19 @@ namespace CliNetCore.Cores.Commands
 
         public int Action()
         {
-            if (PowerOnOff == 1)
+            bool result = false;
+            if (IsPowerOn == false)
             {
-                Console.WriteLine("Start service.");
+                Console.WriteLine("Required parameter 'on' or 'off'");
+                return result == true ? 1 : 0;
+            }
+
+            if (Power.Equals("on", StringComparison.OrdinalIgnoreCase) == true)
+            {
                 RpcServiceManager.Instance.Start();
             }
-            else
+            else if (Power.Equals("off", StringComparison.OrdinalIgnoreCase) == true)
             {
-                Console.WriteLine("Stop service.");
                 RpcServiceManager.Instance.Stop();
             }
 

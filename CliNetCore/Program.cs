@@ -46,7 +46,7 @@ namespace CliNetCore
                 if (isContinuous == true)
                 {
                     // 지속적으로 사용하는 경우 결과값 출력.
-                    Console.WriteLine(commandResult == 0 ? "Error" : "Ok");
+                    Console.WriteLine(commandResult < 0 ? "Error" : "Ok");
                 }
             } while (isContinuous == true);
         }

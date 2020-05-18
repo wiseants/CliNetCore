@@ -4,6 +4,7 @@ using AustinHarris.JsonRpc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading;
 
 namespace Utility.Network
@@ -25,6 +26,14 @@ namespace Utility.Network
 
         public int Port { get; set; } = 8055;
 
+        public bool IsRunning
+        {
+            get
+            {
+                return socketListener != null && socketListener.Server.IsBound == true;
+            }
+        }
+
         public ICollection<JsonRpcService> Services { get; set; } = new List<JsonRpcService>();
 
         #endregion
@@ -33,6 +42,12 @@ namespace Utility.Network
 
         public void Start()
         {
+            if (IsRunning == true)
+            {
+                Console.WriteLine("Service already running.");
+                return;
+            }
+
             var rpcResultHandler = new AsyncCallback(state =>
             {
                 var async = ((JsonRpcStateAsync)state);
@@ -43,7 +58,7 @@ namespace Utility.Network
                 writer.FlushAsync();
             });
 
-            socketListener = new SocketListener();
+            socketListener = new SocketListener(IPAddress.Parse("127.0.0.1"), Port);
             tokenSource = new CancellationTokenSource();
 
             socketListener.StartAsync(Port, (writer, line) =>
@@ -55,11 +70,21 @@ namespace Utility.Network
 
                 JsonRpcProcessor.Process(async, writer);
             }, tokenSource.Token);
+
+            Console.WriteLine("Service started.");
         }
 
         public void Stop()
         {
+            if (IsRunning == false)
+            {
+                Console.WriteLine("Service is not running.");
+                return;
+            }
+
             tokenSource.Cancel();
+
+            Console.WriteLine("Service stopped.");
         }
 
         #endregion
