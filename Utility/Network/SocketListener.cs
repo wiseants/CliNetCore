@@ -37,7 +37,7 @@ namespace Utility.Network
 
         #region Public methods
 
-        public async void StartAsync(int listenPort, Action<StreamWriter, string> handleRequest, CancellationToken token)
+        public async void StartAsync(Action<StreamWriter, string> handleRequest, CancellationToken token)
         {
             Start();
 

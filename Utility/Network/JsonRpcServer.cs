@@ -61,7 +61,7 @@ namespace Utility.Network
             socketListener = new SocketListener(IPAddress.Parse("127.0.0.1"), Port);
             tokenSource = new CancellationTokenSource();
 
-            socketListener.StartAsync(Port, (writer, line) =>
+            socketListener.StartAsync((writer, line) =>
             {
                 var async = new JsonRpcStateAsync(rpcResultHandler, writer)
                 {
